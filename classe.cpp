@@ -15,12 +15,10 @@ struct BlinkElement {
                   << (&tag == &tag_name ? "YES (same object)" : "NO (different objects, copy happened)")
                   << std::endl;
 
-        // Show the internal buffer address (where the actual bytes sit)
         std::cout << "\n--- Where are the bytes 'd','i','v' physically? ---" << std::endl;
         std::cout << "tag.data()      = " << (void*)tag.data() << std::endl;
         std::cout << "tag_name.data() = " << (void*)tag_name.data() << std::endl;
 
-        // SSO check: is the buffer inside the object itself?
         const char* tag_start = reinterpret_cast<const char*>(&tag);
         const char* tag_end = tag_start + sizeof(std::string);
         const char* tag_buf = tag.data();
@@ -34,7 +32,6 @@ struct BlinkElement {
         std::cout << "tag uses SSO (buffer inside object)?      " << (tag_uses_sso ? "YES" : "NO (heap)") << std::endl;
         std::cout << "tag_name uses SSO (buffer inside object)?  " << (tn_uses_sso ? "YES" : "NO (heap)") << std::endl;
 
-        // Dump the actual bytes
         std::cout << "\n--- Raw bytes at tag_name.data() ---" << std::endl;
         for (size_t i = 0; i <= tag_name.size(); i++) {
             std::cout << "  byte[" << i << "] = 0x"
@@ -58,8 +55,6 @@ int main() {
     std::cout << std::endl;
 
     std::cout << "\n=== STEP 2: Temporary std::string constructed ===" << std::endl;
-    // This is what the compiler does implicitly when you call BlinkElement("div")
-    // It constructs a temporary std::string from the literal
     std::cout << "(The compiler builds a temporary std::string on the stack from the literal)" << std::endl;
 
     std::cout << "\n=== STEP 3: Constructor called ===" << std::endl;
